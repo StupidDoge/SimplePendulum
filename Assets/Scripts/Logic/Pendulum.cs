@@ -1,18 +1,22 @@
-using System.Collections;
-using System.Collections.Generic;
+using Assets.Scripts.Configs;
 using UnityEngine;
 
-public class Pendulum : MonoBehaviour
+namespace Assets.Scripts.Logic
 {
-    // Start is called before the first frame update
-    void Start()
+    public class Pendulum : MonoBehaviour
     {
-        
-    }
+        [SerializeField] private PendulumConfig _pendulumConfig;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        private float _rotationTime;
+
+        private void Update() 
+            => CalculateRotation();
+
+        private void CalculateRotation()
+        {
+            _rotationTime += Time.deltaTime;
+            float rotationAngle = _pendulumConfig.RotationAngle * Mathf.Sin(_rotationTime * _pendulumConfig.RotationSpeed);
+            transform.rotation = Quaternion.Euler(0, 0, rotationAngle);
+        }
     }
 }
