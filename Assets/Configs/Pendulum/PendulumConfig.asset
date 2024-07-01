@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36457a18769de6d4c8c3252b58c5b1d9, type: 3}
   m_Name: PendulumConfig
   m_EditorClassIdentifier: 
-  _rotationAngle: 40
+  _rotationAngle: 60
   _rotationSpeed: 2
+  _dropForce: 10

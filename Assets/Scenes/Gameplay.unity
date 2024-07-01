@@ -135,6 +135,7 @@ GameObject:
   - component: {fileID: 127151299}
   - component: {fileID: 127151300}
   - component: {fileID: 127151301}
+  - component: {fileID: 127151302}
   m_Layer: 0
   m_Name: Circle
   m_TagString: Untagged
@@ -271,6 +272,18 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &127151302
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 127151297}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a66fdf2a13907f64aa4cdb431aaefa23, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &467548040
 GameObject:
   m_ObjectHideFlags: 0
@@ -624,6 +637,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _pendulumConfig: {fileID: 11400000, guid: 43813a85e2e4ee045a559c2925210a1a, type: 2}
+  _circle: {fileID: 127151301}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
