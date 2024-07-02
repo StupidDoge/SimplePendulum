@@ -284,6 +284,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a66fdf2a13907f64aa4cdb431aaefa23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _circleConfig: {fileID: 0}
 --- !u!1 &467548040
 GameObject:
   m_ObjectHideFlags: 0
@@ -637,7 +638,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _pendulumConfig: {fileID: 11400000, guid: 43813a85e2e4ee045a559c2925210a1a, type: 2}
-  _circle: {fileID: 127151301}
+  _circle: {fileID: 127151302}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

@@ -1,13 +1,12 @@
 using Assets.Scripts.Configs;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace Assets.Scripts.Logic
 {
     public class Pendulum : MonoBehaviour
     {
         [SerializeField] private PendulumConfig _pendulumConfig;
-        [SerializeField] private Rigidbody2D _circle;
+        [SerializeField] private Circle _circle;
 
         private float _oldRotationAngle;
         private float _movementDirection;
@@ -34,6 +33,7 @@ namespace Assets.Scripts.Logic
             _oldRotationAngle = transform.rotation.eulerAngles.z;
             transform.rotation = Quaternion.Euler(0, 0, angle);
             _movementDirection = transform.rotation.eulerAngles.z - _oldRotationAngle;
+
             _rotationTime += Time.deltaTime;
         }
 
@@ -46,26 +46,8 @@ namespace Assets.Scripts.Logic
 
             if (Input.GetMouseButtonDown(0))
             {
-                DropCircleWithForce(_actualDropForce);
+                _circle.DropWithForce(_actualDropForce, _movementDirection, _pendulumConfig.RotationAngle);
             }
-        }
-
-        private void DropCircleWithForce(float force)
-        {
-            _circle.transform.parent = null;
-            _circle.isKinematic = false;
-
-            int directionFromMovement = _movementDirection > 0 ? 1 : -1;
-            float angle = transform.rotation.eulerAngles.z;
-            if (angle > 180)
-            {
-                angle -= 360;
-                directionFromMovement *= -1;
-            }
-
-            float dropDirection = angle / _pendulumConfig.RotationAngle * directionFromMovement;
-
-            _circle.AddForce(force * dropDirection * transform.right, ForceMode2D.Impulse);
         }
     }
 }
