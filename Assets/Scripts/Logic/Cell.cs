@@ -1,5 +1,5 @@
 using System;
-using Unity.Burst.CompilerServices;
+using System.Collections;
 using UnityEngine;
 
 namespace Assets.Scripts.Logic
@@ -8,8 +8,9 @@ namespace Assets.Scripts.Logic
     public class Cell : MonoBehaviour
     {
         public static event Action OnCircleDropped;
+        public static event Action OnLineDestroyed;
 
-        private const float CastOffset = 0.01f;
+        private const float CastDistance = 0.01f;
 
         [SerializeField] private Transform _upCheck;
         [SerializeField] private Transform _upLeftCheck;
@@ -23,8 +24,7 @@ namespace Assets.Scripts.Logic
         private Cell _aboveCell;
         private BoxCollider2D _boxCollider;
 
-        public Circle Circle { get; private set; }
-        public int Id { get; set; }
+        [field: SerializeField] public Circle Circle { get; private set; }
 
         public bool InVerticalLine
             => HasSameCircleAt(_upCheck) && HasSameCircleAt(_downCheck);
@@ -41,10 +41,35 @@ namespace Assets.Scripts.Logic
         private bool InDecreasingDiagonalLine
             => HasSameCircleAt(_upLeftCheck) && HasSameCircleAt(_downRightCheck);
 
+        public void TryFindCellAbove()
+        {
+            _boxCollider = GetComponent<BoxCollider2D>();
+            Vector2 topPosition = new(transform.position.x, transform.position.y + _boxCollider.bounds.extents.y + CastDistance);
+            RaycastHit2D hit = Physics2D.Raycast(topPosition, Vector2.up, CastDistance);
+
+            if (hit.collider != null && hit.transform.TryGetComponent(out Cell cell))
+            {
+                _aboveCell = cell;
+            }
+        }
+
+        public bool HasEmptyCellBelow()
+        {
+            Vector2 checkPosition = new(_downCheck.position.x, _downCheck.position.y);
+            RaycastHit2D hit = Physics2D.Raycast(checkPosition, Vector2.zero, CastDistance);
+
+            if (hit.collider != null && hit.transform.TryGetComponent(out Cell cell) && cell.Circle == null)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         public bool HasSameCircleAt(Transform check)
         {
             Vector2 checkPosition = new(check.position.x, check.position.y);
-            RaycastHit2D hit = Physics2D.Raycast(checkPosition, Vector2.zero, CastOffset);
+            RaycastHit2D hit = Physics2D.Raycast(checkPosition, Vector2.zero, CastDistance);
 
             return HasSameCircleInDirection(hit);
         }
@@ -52,7 +77,7 @@ namespace Assets.Scripts.Logic
         public Circle GetCircleAt(Transform check)
         {
             Vector2 checkPosition = new(check.position.x, check.position.y);
-            RaycastHit2D hit = Physics2D.Raycast(checkPosition, Vector2.zero, CastOffset);
+            RaycastHit2D hit = Physics2D.Raycast(checkPosition, Vector2.zero, CastDistance);
 
             if (hit.collider != null && hit.collider.TryGetComponent(out Cell cell))
             {
@@ -106,28 +131,6 @@ namespace Assets.Scripts.Logic
             }
         }
 
-        private void DeleteNeighboursAt(Transform first, Transform second)
-        {
-            Circle firstCircle = GetCircleAt(first);
-            Circle secondCircle = GetCircleAt(second);
-
-            Destroy(firstCircle.gameObject);
-            Destroy(secondCircle.gameObject);
-            Destroy(Circle.gameObject);
-        }
-
-        public void TryFindCellAbove()
-        {
-            _boxCollider = GetComponent<BoxCollider2D>();
-            Vector2 topPosition = new(transform.position.x, transform.position.y + _boxCollider.bounds.extents.y + CastOffset);
-            RaycastHit2D hit = Physics2D.Raycast(topPosition, Vector2.up, CastOffset);
-
-            if (hit.collider != null && hit.transform.TryGetComponent(out Cell cell))
-            {
-                _aboveCell = cell;
-            }
-        }
-
         public void DisableCellAbove()
         {
             if (_aboveCell != null)
@@ -136,21 +139,40 @@ namespace Assets.Scripts.Logic
             }
         }
 
+        public void ReleaseCircle()
+        {
+            Debug.LogError("Release " + gameObject.name);
+            Circle.SetupForDrop();
+        }
+
+        private void DeleteNeighboursAt(Transform first, Transform second)
+        {
+            Circle firstCircle = GetCircleAt(first);
+            Circle secondCircle = GetCircleAt(second);
+
+            Destroy(firstCircle.gameObject);
+            Destroy(secondCircle.gameObject);
+            Destroy(Circle.gameObject);
+            Circle = null;
+
+            OnLineDestroyed?.Invoke();
+        }
+
         private void OnTriggerEnter2D(Collider2D collision)
         {
             if (collision.TryGetComponent(out Circle circle))
             {
                 Circle = circle;
-                circle.transform.position = transform.position;
-                circle.transform.parent = transform;
-                circle.SetupForCell();
-                Debug.LogError(Circle);
-                OnCircleDropped?.Invoke();
+                Circle.transform.position = transform.position;
+                Circle.transform.parent = transform;
+                Circle.SetupForCell();
 
                 if (_aboveCell != null)
                 {
                     _aboveCell.gameObject.SetActive(true);
                 }
+
+                OnCircleDropped?.Invoke();
             }
         }
     }

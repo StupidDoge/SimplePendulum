@@ -50,5 +50,10 @@ namespace Assets.Scripts.Logic
             _rigidbody.isKinematic = true;
             _rigidbody.simulated = false;
         }
+
+        public void SetupForDrop()
+        {
+            _rigidbody.simulated = true;
+        }
     }
 }
