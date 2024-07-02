@@ -33,8 +33,13 @@ namespace Assets.Scripts.Logic
             => HasSameCircleAt(_leftCheck) && HasSameCircleAt(_rightCheck);
 
         public bool InDiagonalLine
-            => HasSameCircleAt(_upLeftCheck) && HasSameCircleAt(_downRightCheck)
-            || HasSameCircleAt(_upRightCheck) && HasSameCircleAt(_downLeftCheck);
+            => InIncreasingDiagonalLine || InDecreasingDiagonalLine;
+
+        private bool InIncreasingDiagonalLine
+            => HasSameCircleAt(_upRightCheck) && HasSameCircleAt(_downLeftCheck);
+
+        private bool InDecreasingDiagonalLine
+            => HasSameCircleAt(_upLeftCheck) && HasSameCircleAt(_downRightCheck);
 
         public bool HasSameCircleAt(Transform check)
         {
@@ -42,6 +47,22 @@ namespace Assets.Scripts.Logic
             RaycastHit2D hit = Physics2D.Raycast(checkPosition, Vector2.zero, CastOffset);
 
             return HasSameCircleInDirection(hit);
+        }
+
+        public Circle GetCircleAt(Transform check)
+        {
+            Vector2 checkPosition = new(check.position.x, check.position.y);
+            RaycastHit2D hit = Physics2D.Raycast(checkPosition, Vector2.zero, CastOffset);
+
+            if (hit.collider != null && hit.collider.TryGetComponent(out Cell cell))
+            {
+                if (cell.Circle != null) 
+                {
+                    return cell.Circle;
+                }
+            }
+
+            throw new NullReferenceException("Circle is null!");
         }
 
         public bool HasSameCircleInDirection(RaycastHit2D hit)
@@ -65,6 +86,34 @@ namespace Assets.Scripts.Logic
             }
 
             return false;
+        }
+
+        public void DeleteHorizontalNeighbours() 
+            => DeleteNeighboursAt(_rightCheck, _leftCheck);
+
+        public void DeleteVerticalNeighbours() 
+            => DeleteNeighboursAt(_upCheck, _downCheck);
+
+        public void DeleteDiagonalNeigbours()
+        {
+            if (InIncreasingDiagonalLine)
+            {
+                DeleteNeighboursAt(_upRightCheck, _downLeftCheck);
+            }
+            else if (InDecreasingDiagonalLine)
+            {
+                DeleteNeighboursAt(_upLeftCheck, _downRightCheck);
+            }
+        }
+
+        private void DeleteNeighboursAt(Transform first, Transform second)
+        {
+            Circle firstCircle = GetCircleAt(first);
+            Circle secondCircle = GetCircleAt(second);
+
+            Destroy(firstCircle.gameObject);
+            Destroy(secondCircle.gameObject);
+            Destroy(Circle.gameObject);
         }
 
         public void TryFindCellAbove()
@@ -95,6 +144,7 @@ namespace Assets.Scripts.Logic
                 circle.transform.position = transform.position;
                 circle.transform.parent = transform;
                 circle.SetupForCell();
+                Debug.LogError(Circle);
                 OnCircleDropped?.Invoke();
 
                 if (_aboveCell != null)

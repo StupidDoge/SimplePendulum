@@ -47,15 +47,18 @@ namespace Assets.Scripts.Logic
             {
                 if (cell.InVerticalLine)
                 {
-                    Debug.Log("vertical");
+                    cell.DeleteVerticalNeighbours();
+                    return;
                 }
                 else if (cell.InHorizontalLine)
                 {
-                    Debug.Log("horizontal");
+                    cell.DeleteHorizontalNeighbours();
+                    return;
                 }
                 else if (cell.InDiagonalLine)
                 {
-                    Debug.Log("diagonal");
+                    cell.DeleteDiagonalNeigbours();
+                    return;
                 }
             }
         }
