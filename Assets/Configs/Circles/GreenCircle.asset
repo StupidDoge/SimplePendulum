@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b168a62d8f7e6f341ac856996cefc0cc, type: 3}
   m_Name: GreenCircle
   m_EditorClassIdentifier: 
+  _type: 2
   _color: {r: 0, g: 1, b: 0, a: 1}
   _score: 10

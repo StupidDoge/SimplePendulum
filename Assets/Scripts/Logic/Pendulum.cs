@@ -15,6 +15,7 @@ namespace Assets.Scripts.Logic
         private float _rotationTime;
         private float _actualDropForce;
         private bool _isReloading;
+        private bool _gameIsEnded;
 
         private bool IsRotatingRight => transform.rotation.z > 0;
 
@@ -47,7 +48,7 @@ namespace Assets.Scripts.Logic
                 Mathf.InverseLerp(-.5f, 0, transform.rotation.z);
             _actualDropForce = _pendulumConfig.DropForce * forceMultiplier * _pendulumConfig.RotationSpeed;
 
-            if (Input.GetMouseButtonDown(0) && !_isReloading)
+            if (Input.GetMouseButtonDown(0) && !_isReloading && !_gameIsEnded)
             {
                 _circle.DropWithForce(_actualDropForce, _movementDirection, _pendulumConfig.RotationAngle);
                 StartCoroutine(SpawnCircleWithDelay());
@@ -60,6 +61,11 @@ namespace Assets.Scripts.Logic
             yield return new WaitForSeconds(1f);
             _circle = _spawner.SpawnRandomCircle();
             _isReloading = false;
+        }
+
+        private void Stop()
+        {
+            _gameIsEnded = true;
         }
     }
 }

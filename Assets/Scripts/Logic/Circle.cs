@@ -1,5 +1,6 @@
 using Assets.Scripts.Configs;
 using UnityEngine;
+using static Assets.Scripts.Configs.CircleConfig;
 
 namespace Assets.Scripts.Logic
 {
@@ -10,6 +11,9 @@ namespace Assets.Scripts.Logic
         private CircleConfig _circleConfig;
         private Rigidbody2D _rigidbody;
         private SpriteRenderer _sprite;
+
+        public int Score => _circleConfig.Score;
+        public CircleType Type => _circleConfig.Type;
 
         private void Awake()
         {

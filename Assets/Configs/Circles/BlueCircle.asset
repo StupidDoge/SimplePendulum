@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b168a62d8f7e6f341ac856996cefc0cc, type: 3}
   m_Name: BlueCircle
   m_EditorClassIdentifier: 
+  _type: 1
   _color: {r: 0, g: 0, b: 1, a: 1}
   _score: 5

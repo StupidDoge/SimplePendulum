@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: PendulumConfig
   m_EditorClassIdentifier: 
   _rotationAngle: 60
-  _rotationSpeed: 2
+  _rotationSpeed: 1
   _dropForce: 10
