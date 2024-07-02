@@ -1,24 +1,27 @@
 using Assets.Scripts.Configs;
+using System.Collections;
 using UnityEngine;
 
 namespace Assets.Scripts.Logic
 {
     public class Pendulum : MonoBehaviour
     {
+        [SerializeField] private CircleSpawner _spawner;
         [SerializeField] private PendulumConfig _pendulumConfig;
-        [SerializeField] private Circle _circle;
-
+        
+        private Circle _circle;
         private float _oldRotationAngle;
         private float _movementDirection;
-
         private float _rotationTime;
         private float _actualDropForce;
+        private bool _isReloading;
 
         private bool IsRotatingRight => transform.rotation.z > 0;
 
         private void Awake()
         {
             _oldRotationAngle = transform.rotation.eulerAngles.z;
+            _circle = _spawner.SpawnRandomCircle();
         }
 
         private void Update()
@@ -44,10 +47,19 @@ namespace Assets.Scripts.Logic
                 Mathf.InverseLerp(-.5f, 0, transform.rotation.z);
             _actualDropForce = _pendulumConfig.DropForce * forceMultiplier * _pendulumConfig.RotationSpeed;
 
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButtonDown(0) && !_isReloading)
             {
                 _circle.DropWithForce(_actualDropForce, _movementDirection, _pendulumConfig.RotationAngle);
+                StartCoroutine(SpawnCircleWithDelay());
             }
+        }
+
+        private IEnumerator SpawnCircleWithDelay()
+        {
+            _isReloading = true;
+            yield return new WaitForSeconds(1f);
+            _circle = _spawner.SpawnRandomCircle();
+            _isReloading = false;
         }
     }
 }

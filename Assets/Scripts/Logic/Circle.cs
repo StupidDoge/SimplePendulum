@@ -4,15 +4,23 @@ using UnityEngine;
 namespace Assets.Scripts.Logic
 {
     [RequireComponent(typeof(Rigidbody2D))]
+    [RequireComponent(typeof(SpriteRenderer))]
     public class Circle : MonoBehaviour
     {
-        [SerializeField] private CircleConfig _circleConfig;
-
+        private CircleConfig _circleConfig;
         private Rigidbody2D _rigidbody;
+        private SpriteRenderer _sprite;
 
         private void Awake()
         {
             _rigidbody = GetComponent<Rigidbody2D>();
+            _sprite = GetComponent<SpriteRenderer>();
+        }
+
+        public void Init(CircleConfig config)
+        {
+            _circleConfig = config;
+            _sprite.color = config.Color;
         }
 
         public void DropWithForce(float force, float pendulumMovementDirection, float pendulumRotationAngle)
@@ -31,6 +39,12 @@ namespace Assets.Scripts.Logic
             float dropDirection = angle / pendulumRotationAngle * directionFromMovement;
 
             _rigidbody.AddForce(force * dropDirection * transform.right, ForceMode2D.Impulse);
+        }
+
+        public void SetupForCell()
+        {
+            _rigidbody.isKinematic = true;
+            _rigidbody.simulated = false;
         }
     }
 }
