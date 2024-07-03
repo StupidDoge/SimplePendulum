@@ -1660,6 +1660,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _scoreCounterUI: {fileID: 1287104713}
   _gameEndedUI: {fileID: 375145054}
+  _gameEndedPanel: {fileID: 179375126}
   _circlesCounter: {fileID: 501141092}
 --- !u!4 &597366623
 Transform:

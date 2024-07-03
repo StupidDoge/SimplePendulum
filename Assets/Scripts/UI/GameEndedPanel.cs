@@ -1,6 +1,5 @@
 ﻿using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace Assets.Scripts.UI
@@ -11,10 +10,10 @@ namespace Assets.Scripts.UI
         [SerializeField] private Button _playAgainButton;
         [SerializeField] private Button _quitButton;
 
-        private void Awake()
+        public void Init(ISceneLoader sceneloader)
         {
-            _playAgainButton.onClick.AddListener(() => SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex));
-            _quitButton.onClick.AddListener(() => Debug.LogError("Quit"));
+            _playAgainButton.onClick.AddListener(() => sceneloader.LoadGameplayScene());
+            _quitButton.onClick.AddListener(() => sceneloader.LoadStartScene());
         }
 
         public void SetScore(int score) 
