@@ -12,5 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b168a62d8f7e6f341ac856996cefc0cc, type: 3}
   m_Name: RedCircle
   m_EditorClassIdentifier: 
+  _type: 0
   _color: {r: 1, g: 0, b: 0, a: 1}
   _score: 15
+  _circleLayer:
+    serializedVersion: 2
+    m_Bits: 64

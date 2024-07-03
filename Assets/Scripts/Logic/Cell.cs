@@ -142,7 +142,7 @@ namespace Assets.Scripts.Logic
         public void ReleaseCircle()
         {
             Debug.LogError("Release " + gameObject.name);
-            Circle.SetupForDrop();
+            //Circle.SetupForDrop();
         }
 
         private void DeleteNeighboursAt(Transform first, Transform second)
@@ -165,7 +165,7 @@ namespace Assets.Scripts.Logic
                 Circle = circle;
                 Circle.transform.position = transform.position;
                 Circle.transform.parent = transform;
-                Circle.SetupForCell();
+                //Circle.SetupForCell();
 
                 if (_aboveCell != null)
                 {

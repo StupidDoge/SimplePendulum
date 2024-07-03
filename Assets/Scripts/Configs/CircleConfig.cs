@@ -15,9 +15,11 @@ namespace Assets.Scripts.Configs
         [SerializeField] private CircleType _type;
         [SerializeField] private Color _color;
         [SerializeField, Min(0)] private int _score;
+        [SerializeField] private LayerMask _circleLayer;
 
         public CircleType Type => _type;
         public Color Color => _color;
         public int Score => _score;
+        public LayerMask CircleLayer => _circleLayer;
     }
 }

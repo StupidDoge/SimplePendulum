@@ -16,6 +16,7 @@ namespace Assets.Scripts.Logic
         private float _actualDropForce;
         private bool _isReloading;
         private bool _gameIsEnded;
+        private WaitForSeconds _circleSpawnDelay;
 
         private bool IsRotatingRight => transform.rotation.z > 0;
 
@@ -23,6 +24,7 @@ namespace Assets.Scripts.Logic
         {
             _oldRotationAngle = transform.rotation.eulerAngles.z;
             _circle = _spawner.SpawnRandomCircle();
+            _circleSpawnDelay = new(_pendulumConfig.CircleSpawnDelay);
         }
 
         private void Update()
@@ -58,7 +60,7 @@ namespace Assets.Scripts.Logic
         private IEnumerator SpawnCircleWithDelay()
         {
             _isReloading = true;
-            yield return new WaitForSeconds(1f);
+            yield return _circleSpawnDelay;
             _circle = _spawner.SpawnRandomCircle();
             _isReloading = false;
         }
