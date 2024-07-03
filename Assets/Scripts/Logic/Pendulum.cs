@@ -1,4 +1,5 @@
 using Assets.Scripts.Configs;
+using Assets.Scripts.Infrastructure.Services;
 using System.Collections;
 using UnityEngine;
 
@@ -17,6 +18,7 @@ namespace Assets.Scripts.Logic
         private bool _isReloading;
         private bool _gameIsEnded;
         private WaitForSeconds _circleSpawnDelay;
+        private IInputService _inputService;
 
         private bool IsRotatingRight => transform.rotation.z > 0;
 
@@ -31,6 +33,11 @@ namespace Assets.Scripts.Logic
         {
             CalculateRotation();
             CalculateDropForce();
+        }
+
+        public void Init(IInputService inputService)
+        {
+            _inputService = inputService;
         }
 
         private void CalculateRotation()
@@ -50,7 +57,7 @@ namespace Assets.Scripts.Logic
                 Mathf.InverseLerp(-.5f, 0, transform.rotation.z);
             _actualDropForce = _pendulumConfig.DropForce * forceMultiplier * _pendulumConfig.RotationSpeed;
 
-            if (Input.GetMouseButtonDown(0) && !_isReloading && !_gameIsEnded)
+            if (_inputService.IsClicked && !_isReloading && !_gameIsEnded)
             {
                 _circle.DropWithForce(_actualDropForce, _movementDirection, _pendulumConfig.RotationAngle);
                 StartCoroutine(SpawnCircleWithDelay());

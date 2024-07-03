@@ -1,5 +1,8 @@
-﻿public interface ISceneLoader
+﻿namespace Assets.Scripts.Infrastructure.Services
 {
-    void LoadGameplayScene();
-    void LoadStartScene();
+    public interface ISceneLoader
+    {
+        void LoadGameplayScene();
+        void LoadStartScene();
+    }
 }
