@@ -14,6 +14,7 @@ namespace Assets.Scripts.Infrastructure
 
             InitializeSceneLoader();
             InitializeInputService();
+            SetFrameRateOnMobileDevices();
 
             SceneLoader.LoadStartScene();
         }
@@ -26,6 +27,11 @@ namespace Assets.Scripts.Infrastructure
         private void InitializeInputService()
         {
             InputService = new InputService();
+        }
+
+        private void SetFrameRateOnMobileDevices()
+        {
+            Application.targetFrameRate = 60;
         }
     }
 }
