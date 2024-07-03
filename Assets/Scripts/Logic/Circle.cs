@@ -11,7 +11,7 @@ namespace Assets.Scripts.Logic
     public class Circle : MonoBehaviour
     {
         public static event Action<Circle> OnCircleDropped;
-        public static event Action OnLineDestroyed;
+        public static event Action<Circle, Circle, Circle> OnLineDestroyed;
         public static event Action<int> OnLineDestroyedWithScore;
 
         private const float CastDistance = 0.01f;
@@ -93,20 +93,20 @@ namespace Assets.Scripts.Logic
         }
 
         public void DeleteHorizontalNeighbours()
-            => DeleteNeighboursAt(_rightCheck, _leftCheck);
+            => ShowDestroyVisualEffectsForLine(_rightCheck, _leftCheck);
 
         public void DeleteVerticalNeighbours()
-            => DeleteNeighboursAt(_upCheck, _downCheck);
+            => ShowDestroyVisualEffectsForLine(_upCheck, _downCheck);
 
         public void DeleteDiagonalNeigbours()
         {
             if (InIncreasingDiagonalLine)
             {
-                DeleteNeighboursAt(_upRightCheck, _downLeftCheck);
+                ShowDestroyVisualEffectsForLine(_upRightCheck, _downLeftCheck);
             }
             else if (InDecreasingDiagonalLine)
             {
-                DeleteNeighboursAt(_upLeftCheck, _downRightCheck);
+                ShowDestroyVisualEffectsForLine(_upLeftCheck, _downRightCheck);
             }
         }
 
@@ -144,19 +144,15 @@ namespace Assets.Scripts.Logic
             _rigidbody.AddForce(force * dropDirection * transform.right, ForceMode2D.Impulse);
         }
 
-        public IEnumerator DestroyAfterAnimation(Circle first, Circle second)
+        public IEnumerator TriggerDestroyAfterAnimation(Circle first, Circle second)
         {
             yield return new WaitForSeconds(VisualEffect.WaitingTime);
 
-            OnLineDestroyed?.Invoke();
+            OnLineDestroyed?.Invoke(this, first, second);
             OnLineDestroyedWithScore?.Invoke(_circleConfig.Score);
-
-            Destroy(first.gameObject);
-            Destroy(second.gameObject);
-            Destroy(gameObject);
         }
 
-        private void DeleteNeighboursAt(Transform first, Transform second)
+        private void ShowDestroyVisualEffectsForLine(Transform first, Transform second)
         {
             Circle firstCircle = GetCircleAt(first);
             Circle secondCircle = GetCircleAt(second);
@@ -164,7 +160,7 @@ namespace Assets.Scripts.Logic
             firstCircle.VisualEffect.Play();
             secondCircle.VisualEffect.Play();
 
-            StartCoroutine(DestroyAfterAnimation(firstCircle, secondCircle));
+            StartCoroutine(TriggerDestroyAfterAnimation(firstCircle, secondCircle));
         }
 
         private void OnCollisionEnter2D(Collision2D collision)

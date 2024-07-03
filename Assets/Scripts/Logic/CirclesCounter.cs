@@ -56,8 +56,18 @@ namespace Assets.Scripts.Logic
             StartCoroutine(CheckIfContainersAreFullCoroutine());
         }
 
-        private void RemoveCirclesFromList() 
-            => StartCoroutine(RemoveCircleFromListCoroutine());
+        private void RemoveCirclesFromList(Circle target, Circle firstNeighbour, Circle secondNeighbour)
+        {
+            DestroyLineOfCircles(target, firstNeighbour, secondNeighbour);
+            StartCoroutine(RemoveCircleFromListCoroutine());
+        }
+
+        private void DestroyLineOfCircles(Circle target, Circle firstNeighbour, Circle secondNeighbour)
+        {
+            Destroy(target.gameObject);
+            Destroy(firstNeighbour.gameObject);
+            Destroy(secondNeighbour.gameObject);
+        }
 
         private IEnumerator RemoveCircleFromListCoroutine()
         {

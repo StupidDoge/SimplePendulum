@@ -19,6 +19,7 @@ namespace Assets.Scripts.Logic
         private bool _gameIsEnded;
         private WaitForSeconds _circleSpawnDelay;
         private IInputService _inputService;
+        private CirclesCounter _circlesCounter;
 
         private bool IsRotatingRight => transform.rotation.z > 0;
 
@@ -35,9 +36,17 @@ namespace Assets.Scripts.Logic
             CalculateDropForce();
         }
 
-        public void Init(IInputService inputService)
+        private void OnDestroy()
+        {
+            _circlesCounter.OnFieldFullfilled -= StopPendulumInputCheck;
+        }
+
+        public void Init(IInputService inputService, CirclesCounter circlesCounter)
         {
             _inputService = inputService;
+            _circlesCounter = circlesCounter;
+
+            _circlesCounter.OnFieldFullfilled += StopPendulumInputCheck;
         }
 
         private void CalculateRotation()
@@ -72,7 +81,7 @@ namespace Assets.Scripts.Logic
             _isReloading = false;
         }
 
-        private void Stop()
+        private void StopPendulumInputCheck()
         {
             _gameIsEnded = true;
         }

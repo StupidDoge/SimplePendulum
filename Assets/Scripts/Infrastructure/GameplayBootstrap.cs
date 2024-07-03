@@ -21,7 +21,7 @@ namespace Assets.Scripts.Infrastructure
             _scoreCounter = new ScoreCounter();
             _scoreCounter.SubscribeToEvents();
 
-            _pendulum.Init(gameBootstrap.InputService);
+            _pendulum.Init(gameBootstrap.InputService, _circlesCounter);
             _gameEndedUI.Init(_scoreCounter, _circlesCounter);
             _gameEndedPanel.Init(gameBootstrap.SceneLoader);
             _scoreCounterUI.Init(_scoreCounter);
