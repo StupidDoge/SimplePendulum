@@ -1663,6 +1663,8 @@ MonoBehaviour:
   _gameEndedUI: {fileID: 375145054}
   _gameEndedPanel: {fileID: 179375126}
   _circlesCounter: {fileID: 501141092}
+  _circleSpawner: {fileID: 1938980999}
+  _circlesFactory: {fileID: 965738180}
 --- !u!4 &597366623
 Transform:
   m_ObjectHideFlags: 0
@@ -1929,6 +1931,51 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &965738179
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 965738181}
+  - component: {fileID: 965738180}
+  m_Layer: 0
+  m_Name: CirclesFactory
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &965738180
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 965738179}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 048bd3c65d550174b91574f77edf5754, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _circlePrefab: {fileID: 2358941617267875030, guid: 1ba0aed561fbf5049afecde8d166c871, type: 3}
+--- !u!4 &965738181
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 965738179}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1045524990
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3268,7 +3315,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _spawnPoint: {fileID: 4267976647900561460}
-  _circlePrefab: {fileID: 2358941617267875030, guid: 1ba0aed561fbf5049afecde8d166c871, type: 3}
   _circleConfigs:
   - {fileID: 11400000, guid: 4818b97205e38e24aa90a568610d8228, type: 2}
   - {fileID: 11400000, guid: e5b238aa6140e6546855ead0e0583cc5, type: 2}
@@ -3566,6 +3612,7 @@ SceneRoots:
   - {fileID: 539103427}
   - {fileID: 597366623}
   - {fileID: 1938981000}
+  - {fileID: 965738181}
   - {fileID: 371898938}
   - {fileID: 1647405588}
   - {fileID: 467548043}

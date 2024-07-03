@@ -1,3 +1,4 @@
+using Assets.Scripts.Infrastructure.Factory;
 using Assets.Scripts.Logic;
 using Assets.Scripts.UI;
 using UnityEngine;
@@ -11,6 +12,8 @@ namespace Assets.Scripts.Infrastructure
         [SerializeField] private GameEndedUI _gameEndedUI;
         [SerializeField] private GameEndedPanel _gameEndedPanel;
         [SerializeField] private CirclesCounter _circlesCounter;
+        [SerializeField] private CircleSpawner _circleSpawner;
+        [SerializeField] private CirclesFactory _circlesFactory;
 
         private ScoreCounter _scoreCounter;
 
@@ -20,6 +23,8 @@ namespace Assets.Scripts.Infrastructure
 
             _scoreCounter = new ScoreCounter();
             _scoreCounter.SubscribeToEvents();
+
+            _circleSpawner.Init(_circlesFactory);
 
             _pendulum.Init(gameBootstrap.InputService, _circlesCounter);
             _gameEndedUI.Init(_scoreCounter, _circlesCounter);
