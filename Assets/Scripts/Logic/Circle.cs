@@ -1,5 +1,6 @@
 using Assets.Scripts.Configs;
 using System;
+using System.Collections;
 using UnityEngine;
 using static Assets.Scripts.Configs.CircleConfig;
 
@@ -16,6 +17,8 @@ namespace Assets.Scripts.Logic
         private const float CastDistance = 0.01f;
         private const string FloorTag = "Floor";
         private const string CircleTag = "Circle";
+
+        [SerializeField] private CircleVisualEffect _visualEffect;
 
         [Header("Neighboring circles checks")]
         [SerializeField] private Transform _upCheck;
@@ -34,6 +37,7 @@ namespace Assets.Scripts.Logic
 
         public int Score => _circleConfig.Score;
         public CircleType Type => _circleConfig.Type;
+        public CircleVisualEffect VisualEffect => _visualEffect;
 
         public bool InVerticalLine
             => HasSameCircleAt(_upCheck) && HasSameCircleAt(_downCheck);
@@ -140,16 +144,27 @@ namespace Assets.Scripts.Logic
             _rigidbody.AddForce(force * dropDirection * transform.right, ForceMode2D.Impulse);
         }
 
+        public IEnumerator DestroyAfterAnimation(Circle first, Circle second)
+        {
+            yield return new WaitForSeconds(VisualEffect.WaitingTime);
+
+            OnLineDestroyed?.Invoke();
+            OnLineDestroyedWithScore?.Invoke(_circleConfig.Score);
+
+            Destroy(first.gameObject);
+            Destroy(second.gameObject);
+            Destroy(gameObject);
+        }
+
         private void DeleteNeighboursAt(Transform first, Transform second)
         {
             Circle firstCircle = GetCircleAt(first);
             Circle secondCircle = GetCircleAt(second);
-            OnLineDestroyed?.Invoke();
-            OnLineDestroyedWithScore?.Invoke(_circleConfig.Score);
+            _visualEffect.Play();
+            firstCircle.VisualEffect.Play();
+            secondCircle.VisualEffect.Play();
 
-            Destroy(firstCircle.gameObject);
-            Destroy(secondCircle.gameObject);
-            Destroy(gameObject);
+            StartCoroutine(DestroyAfterAnimation(firstCircle, secondCircle));
         }
 
         private void OnCollisionEnter2D(Collision2D collision)
