@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,6 +8,8 @@ namespace Assets.Scripts.Logic
 {
     public class CirclesCounter : MonoBehaviour
     {
+        public event Action OnFieldFullfilled;
+
         private const float ContainersCheckDelay = 1f;
 
         [SerializeField] private List<CirclesContainer> _circlesContainers;
@@ -69,7 +72,7 @@ namespace Assets.Scripts.Logic
 
             if (_circlesContainers.All(container => container.IsFull))
             {
-                Debug.LogError("game ended");
+                OnFieldFullfilled?.Invoke();
             }
         }
     }

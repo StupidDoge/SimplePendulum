@@ -11,6 +11,7 @@ namespace Assets.Scripts.Logic
     {
         public static event Action<Circle> OnCircleDropped;
         public static event Action OnLineDestroyed;
+        public static event Action<int> OnLineDestroyedWithScore;
 
         private const float CastDistance = 0.01f;
         private const string FloorTag = "Floor";
@@ -144,6 +145,7 @@ namespace Assets.Scripts.Logic
             Circle firstCircle = GetCircleAt(first);
             Circle secondCircle = GetCircleAt(second);
             OnLineDestroyed?.Invoke();
+            OnLineDestroyedWithScore?.Invoke(_circleConfig.Score);
 
             Destroy(firstCircle.gameObject);
             Destroy(secondCircle.gameObject);
