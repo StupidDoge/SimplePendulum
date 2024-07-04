@@ -24,5 +24,10 @@ namespace Assets.Scripts.UI
             _container.gameObject.SetActive(true);
             _gameEndedPanel.SetScore(_scoreCounter.Score);
         }
+
+        private void OnDestroy()
+        {
+            _circlesCounter.OnFieldFullfilled -= ShowGameEndedPanel;
+        }
     }
 }
